@@ -19,11 +19,10 @@ a {padding:10px 20px; background:green; color:white; text-decoration:none; borde
 <body>
 
 <div class="container">
-<h1>Dashboard Pelaporan Sampah 🗑️</h1>
+<h1>Dashboard Edukasi</h1>
 <br>
-<a href="index.php">Masuk ke Laporan</a>
+<a href="index.php">Masuk</a>
 <br><br>
-<a href="logout.php">Logout</a>
 </div>
 
 </body>

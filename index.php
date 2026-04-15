@@ -1,11 +1,14 @@
 <?php
 session_start();
 if (!isset($_SESSION['login'])) {
-    echo "<script>window.location='login.php'</script>";
+    header("Location: login.php");
     exit;
 }
 
 include 'koneksi.php';
+include 'Edukasi.php';
+
+$edukasi = new Edukasi($conn);
 
 $target_dir = "uploads/";
 if (!file_exists($target_dir)) {
@@ -19,15 +22,14 @@ if (isset($_POST['simpan'])) {
     $foto = $_FILES['foto']['name'];
     move_uploaded_file($_FILES['foto']['tmp_name'], $target_dir.$foto);
 
-    mysqli_query($conn, "INSERT INTO laporan (judul, deskripsi, foto) 
-    VALUES ('$judul','$deskripsi','$foto')");
+    $edukasi->tambah($judul, $deskripsi, $foto);
 }
 
 if (isset($_GET['hapus'])) {
-    mysqli_query($conn, "DELETE FROM laporan WHERE id=".$_GET['hapus']);
+    $edukasi->hapus($_GET['hapus']);
 }
 
-$data = mysqli_query($conn, "SELECT * FROM laporan");
+$data = $edukasi->tampil();
 ?>
 
 <!DOCTYPE html>
@@ -36,7 +38,7 @@ $data = mysqli_query($conn, "SELECT * FROM laporan");
 <title>Upload Edukasi</title>
 <style>
 body {font-family: Arial; background:#f4f4f4;}
-.container {width:80%; margin:auto; background:white; padding:20px;}
+.container {width:80%; margin:auto; background:white; padding:20px; border-radius:10px;}
 input, textarea {width:100%; padding:10px; margin:5px;}
 button {padding:10px; background:green; color:white; border:none;}
 img {width:100px;}
@@ -81,8 +83,10 @@ td, th {border:1px solid #ddd; padding:10px;}
 </table>
 
 <br>
-<a href="dashboard.php">Kembali</a>
 
+<a href="logout.php" onclick="return confirm('Yakin mau logout?')">
+<button style="background:red;">Logout</button>
+</a>
 </div>
 
 </body>
